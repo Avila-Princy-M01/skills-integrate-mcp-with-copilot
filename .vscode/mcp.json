@@ -13,6 +13,20 @@
       "env": {
         "GITHUB_PERSONAL_ACCESS_TOKEN": "${input:github_token}"
       }
+    },
+    "copilot": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "COPILOT_ACCESS_TOKEN",
+        "ghcr.io/github/copilot-mcp-server:v1.0.0"
+      ],
+      "env": {
+        "COPILOT_ACCESS_TOKEN": "${input:copilot_token}"
+      }
     }
   },
   "inputs": [
@@ -20,6 +34,12 @@
       "type": "promptString",
       "id": "github_token",
       "description": "GitHub Personal Access Token",
+      "password": true
+    },
+    {
+      "type": "promptString",
+      "id": "copilot_token",
+      "description": "Copilot Access Token",
       "password": true
     }
   ]
