@@ -8,6 +8,8 @@ for extracurricular activities at Mergington High School.
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
+from pydantic import BaseModel
+from typing import List, Optional
 import os
 from pathlib import Path
 import json
@@ -19,6 +21,30 @@ app = FastAPI(title="Mergington High School API",
 current_dir = Path(__file__).parent
 app.mount("/static", StaticFiles(directory=os.path.join(Path(__file__).parent,
           "static")), name="static")
+
+# Pydantic models for user profiles
+class Profile(BaseModel):
+    email: str
+    name: str
+    grade_level: str
+    achievements: List[str] = []
+    roles: List[str] = []
+    skills: List[str] = []
+    extracurricular_activities: List[str] = []
+    leadership_roles: List[str] = []
+
+class ProfileCreate(BaseModel):
+    email: str
+    name: str
+    grade_level: str
+    achievements: List[str] = []
+    roles: List[str] = []
+    skills: List[str] = []
+    extracurricular_activities: List[str] = []
+    leadership_roles: List[str] = []
+
+# In-memory profiles database
+profiles = {}
 
 # In-memory activity database
 activities = {
@@ -132,7 +158,64 @@ def unregister_from_activity(activity_name: str, email: str):
     activity["participants"].remove(email)
     return {"message": f"Unregistered {email} from {activity_name}"}
 
+
+# Profile endpoints
+@app.get("/profiles")
+def get_profiles():
+    """Get all profiles"""
+    return profiles
+
+
+@app.get("/profiles/{email}")
+def get_profile(email: str):
+    """Get a specific profile by email"""
+    if email not in profiles:
+        raise HTTPException(status_code=404, detail="Profile not found")
+    return profiles[email]
+
+
+@app.post("/profiles")
+def create_profile(profile: ProfileCreate):
+    """Create a new profile"""
+    if profile.email in profiles:
+        raise HTTPException(status_code=400, detail="Profile already exists")
+    
+    profiles[profile.email] = profile.dict()
+    return {"message": f"Profile created for {profile.email}"}
+
+
+@app.put("/profiles/{email}")
+def update_profile(email: str, profile: ProfileCreate):
+    """Update an existing profile"""
+    if email not in profiles:
+        raise HTTPException(status_code=404, detail="Profile not found")
+    
+    profiles[email] = profile.dict()
+    return {"message": f"Profile updated for {email}"}
+
+
+@app.delete("/profiles/{email}")
+def delete_profile(email: str):
+    """Delete a profile"""
+    if email not in profiles:
+        raise HTTPException(status_code=404, detail="Profile not found")
+    
+    del profiles[email]
+    return {"message": f"Profile deleted for {email}"}
+
+
 # Load activities from JSON file
 activities_file = os.path.join(current_dir, "activities.json")
 with open(activities_file, "r") as f:
     activities = json.load(f)
+
+# Load profiles from JSON file (create if doesn't exist)
+profiles_file = os.path.join(current_dir, "profiles.json")
+try:
+    with open(profiles_file, "r") as f:
+        profiles = json.load(f)
+except FileNotFoundError:
+    profiles = {}
+    # Create empty profiles.json file
+    with open(profiles_file, "w") as f:
+        json.dump(profiles, f, indent=2)

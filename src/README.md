@@ -6,6 +6,8 @@ A super simple FastAPI application that allows students to view and sign up for 
 
 - View all available extracurricular activities
 - Sign up for activities
+- Create and manage student profiles
+- View student profiles showcasing achievements, roles, and skills
 
 ## Getting Started
 
@@ -27,17 +29,27 @@ A super simple FastAPI application that allows students to view and sign up for 
 
 ## API Endpoints
 
+### Activities
 | Method | Endpoint                                                          | Description                                                         |
 | ------ | ----------------------------------------------------------------- | ------------------------------------------------------------------- |
 | GET    | `/activities`                                                     | Get all activities with their details and current participant count |
 | POST   | `/activities/{activity_name}/signup?email=student@mergington.edu` | Sign up for an activity                                             |
+| DELETE | `/activities/{activity_name}/unregister?email=student@mergington.edu` | Unregister from an activity                                       |
+
+### User Profiles
+| Method | Endpoint                    | Description                   |
+| ------ | --------------------------- | ----------------------------- |
+| GET    | `/profiles`                 | Get all user profiles         |
+| GET    | `/profiles/{email}`         | Get a specific user profile   |
+| POST   | `/profiles`                 | Create a new user profile     |
+| PUT    | `/profiles/{email}`         | Update an existing profile    |
+| DELETE | `/profiles/{email}`         | Delete a user profile         |
 
 ## Data Model
 
 The application uses a simple data model with meaningful identifiers:
 
 1. **Activities** - Uses activity name as identifier:
-
    - Description
    - Schedule
    - Maximum number of participants allowed
@@ -47,4 +59,13 @@ The application uses a simple data model with meaningful identifiers:
    - Name
    - Grade level
 
-All data is stored in memory, which means data will be reset when the server restarts.
+3. **User Profiles** - Uses email as identifier:
+   - Name
+   - Grade level
+   - Achievements (list)
+   - Roles (list)
+   - Skills (list)
+   - Extracurricular activities (list)
+   - Leadership roles (list)
+
+All data is stored in memory and persisted to JSON files, which means data will be reset when the server restarts.
