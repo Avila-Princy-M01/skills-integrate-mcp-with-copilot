@@ -8,9 +8,42 @@
   </head>
   <body>
     <header>
-      <h1>Mergington High School</h1>
-      <h2>Extracurricular Activities</h2>
+      <div class="header-content">
+        <div class="header-text">
+          <h1>Mergington High School</h1>
+          <h2>Extracurricular Activities</h2>
+        </div>
+        <div class="user-section">
+          <div id="user-info" class="hidden">
+            <span id="user-name">Welcome, Teacher</span>
+            <button id="logout-btn" class="logout-btn">Logout</button>
+          </div>
+          <button id="user-icon" class="user-icon">👤</button>
+        </div>
+      </div>
     </header>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Teacher Login</h3>
+          <button class="close-btn" id="close-modal">×</button>
+        </div>
+        <form id="login-form">
+          <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" required />
+          </div>
+          <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" required />
+          </div>
+          <button type="submit">Login</button>
+        </form>
+        <div id="login-message" class="hidden"></div>
+      </div>
+    </div>
 
     <main>
       <section id="activities-container">
@@ -23,6 +56,9 @@
 
       <section id="signup-container">
         <h3>Sign Up for an Activity</h3>
+        <div id="teacher-only-note" class="info-note">
+          <p><strong>Note:</strong> Only teachers can register and unregister students. Please log in to manage student registrations.</p>
+        </div>
         <form id="signup-form">
           <div class="form-group">
             <label for="email">Student Email:</label>
