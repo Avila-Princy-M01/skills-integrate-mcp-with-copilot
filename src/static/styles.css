@@ -57,6 +57,94 @@ section h3 {
   color: #1a237e;
 }
 
+/* Participation Highlights Section */
+#participation-highlights {
+  background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+  color: white;
+  margin-bottom: 30px;
+}
+
+#participation-highlights h3 {
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.highlights-stats {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  padding: 15px 0;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 2em;
+  font-weight: bold;
+  color: #ffd54f;
+}
+
+.stat-label {
+  font-size: 0.9em;
+  opacity: 0.9;
+}
+
+.top-participants h4 {
+  margin-bottom: 15px;
+  color: #ffd54f;
+}
+
+.participants-highlight-list {
+  list-style: none;
+  padding: 0;
+}
+
+.participant-highlight {
+  background: rgba(255, 255, 255, 0.1);
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #ffd54f;
+}
+
+.participant-name {
+  font-weight: bold;
+  font-size: 1.1em;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.activity-count {
+  color: #ffd54f;
+  font-size: 0.9em;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.activity-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.activity-badge {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.no-participants {
+  color: rgba(255, 255, 255, 0.8);
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
+}
+
 .activity-card {
   margin-bottom: 15px;
   padding: 15px;

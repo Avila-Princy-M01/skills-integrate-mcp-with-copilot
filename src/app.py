@@ -132,6 +132,44 @@ def unregister_from_activity(activity_name: str, email: str):
     activity["participants"].remove(email)
     return {"message": f"Unregistered {email} from {activity_name}"}
 
+
+@app.get("/participation-highlights")
+def get_participation_highlights():
+    """Get user participation statistics for highlighting active contributors"""
+    # Count participation for each user
+    user_participation = {}
+    
+    for activity_name, activity_data in activities.items():
+        for participant in activity_data["participants"]:
+            if participant not in user_participation:
+                user_participation[participant] = {
+                    "email": participant,
+                    "activities": [],
+                    "total_activities": 0
+                }
+            user_participation[participant]["activities"].append(activity_name)
+            user_participation[participant]["total_activities"] += 1
+    
+    # Sort users by participation count (descending)
+    sorted_participants = sorted(
+        user_participation.values(),
+        key=lambda x: x["total_activities"],
+        reverse=True
+    )
+    
+    # Get top 5 most active participants
+    top_participants = sorted_participants[:5]
+    
+    # Calculate some general statistics
+    total_participants = len(user_participation)
+    total_activities = len(activities)
+    
+    return {
+        "top_participants": top_participants,
+        "total_participants": total_participants,
+        "total_activities": total_activities
+    }
+
 # Load activities from JSON file
 activities_file = os.path.join(current_dir, "activities.json")
 with open(activities_file, "r") as f:

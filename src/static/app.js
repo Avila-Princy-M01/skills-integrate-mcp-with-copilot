@@ -3,6 +3,57 @@ document.addEventListener("DOMContentLoaded", () => {
   const activitySelect = document.getElementById("activity");
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
+  const highlightsContent = document.getElementById("highlights-content");
+
+  // Function to fetch and display participation highlights
+  async function fetchParticipationHighlights() {
+    try {
+      const response = await fetch("/participation-highlights");
+      const data = await response.json();
+
+      // Clear loading message
+      highlightsContent.innerHTML = "";
+
+      // Create highlights content
+      const highlightsHTML = `
+        <div class="highlights-stats">
+          <div class="stat-item">
+            <span class="stat-number">${data.total_participants}</span>
+            <span class="stat-label">Active Students</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">${data.total_activities}</span>
+            <span class="stat-label">Available Activities</span>
+          </div>
+        </div>
+        <div class="top-participants">
+          <h4>🏆 Most Active Participants</h4>
+          ${data.top_participants.length > 0 
+            ? `<ul class="participants-highlight-list">
+                ${data.top_participants.map(participant => `
+                  <li class="participant-highlight">
+                    <span class="participant-name">${participant.email}</span>
+                    <span class="activity-count">${participant.total_activities} activities</span>
+                    <div class="activity-badges">
+                      ${participant.activities.map(activity => `
+                        <span class="activity-badge">${activity}</span>
+                      `).join('')}
+                    </div>
+                  </li>
+                `).join('')}
+              </ul>`
+            : '<p class="no-participants">No participants yet</p>'
+          }
+        </div>
+      `;
+
+      highlightsContent.innerHTML = highlightsHTML;
+    } catch (error) {
+      highlightsContent.innerHTML = 
+        "<p>Failed to load participation highlights. Please try again later.</p>";
+      console.error("Error fetching participation highlights:", error);
+    }
+  }
 
   // Function to fetch activities from API
   async function fetchActivities() {
@@ -89,7 +140,8 @@ document.addEventListener("DOMContentLoaded", () => {
         messageDiv.textContent = result.message;
         messageDiv.className = "success";
 
-        // Refresh activities list to show updated participants
+        // Refresh activities list and highlights to show updated participants
+        fetchParticipationHighlights();
         fetchActivities();
       } else {
         messageDiv.textContent = result.detail || "An error occurred";
@@ -134,7 +186,8 @@ document.addEventListener("DOMContentLoaded", () => {
         messageDiv.className = "success";
         signupForm.reset();
 
-        // Refresh activities list to show updated participants
+        // Refresh activities list and highlights to show updated participants
+        fetchParticipationHighlights();
         fetchActivities();
       } else {
         messageDiv.textContent = result.detail || "An error occurred";
@@ -156,5 +209,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Initialize app
+  fetchParticipationHighlights();
   fetchActivities();
 });
