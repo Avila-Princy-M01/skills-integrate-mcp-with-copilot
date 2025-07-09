@@ -1,8 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
   const activitiesList = document.getElementById("activities-list");
-  const activitySelect = document.getElementById("activity");
-  const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
+ copilot/fix-7
+  const registrationModal = document.getElementById("registration-modal");
+  const registrationForm = document.getElementById("registration-form");
+  const modalActivityName = document.getElementById("modal-activity-name");
+  const closeButton = document.querySelector(".close-button");
+  const studentEmailInput = document.getElementById("student-email");
+  
+  let currentActivity = null;
  copilot/fix-11
   
   // Team management elements
@@ -420,6 +426,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
  main
  main
+ main
 
   // Function to fetch activities from API
   async function fetchActivities() {
@@ -462,20 +469,20 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="participants-container">
             ${participantsHTML}
           </div>
+          <button class="register-btn" data-activity="${name}">Register Student</button>
         `;
 
         activitiesList.appendChild(activityCard);
-
-        // Add option to select dropdown
-        const option = document.createElement("option");
-        option.value = name;
-        option.textContent = name;
-        activitySelect.appendChild(option);
       });
 
       // Add event listeners to delete buttons
       document.querySelectorAll(".delete-btn").forEach((button) => {
         button.addEventListener("click", handleUnregister);
+      });
+
+      // Add event listeners to register buttons
+      document.querySelectorAll(".register-btn").forEach((button) => {
+        button.addEventListener("click", handleRegisterClick);
       });
     } catch (error) {
       activitiesList.innerHTML =
@@ -540,6 +547,43 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Error unregistering:", error);
     }
   }
+
+ copilot/fix-7
+  // Handle register button click
+  function handleRegisterClick(event) {
+    const button = event.target;
+    currentActivity = button.getAttribute("data-activity");
+    modalActivityName.textContent = currentActivity;
+    studentEmailInput.value = "";
+    registrationModal.classList.remove("hidden");
+    registrationModal.style.display = "block";
+  }
+
+  // Handle modal close
+  function closeModal() {
+    registrationModal.classList.add("hidden");
+    registrationModal.style.display = "none";
+    currentActivity = null;
+  }
+
+  // Event listeners for modal
+  closeButton.addEventListener("click", closeModal);
+  
+  window.addEventListener("click", (event) => {
+    if (event.target === registrationModal) {
+      closeModal();
+    }
+  });
+
+  // Handle registration form submission
+  registrationForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const email = studentEmailInput.value;
+
+    if (!currentActivity) {
+      return;
+    }
 
   // Team management functions
   async function fetchTeams() {
@@ -834,11 +878,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const email = document.getElementById("email").value;
     const activity = document.getElementById("activity").value;
+ main
 
     try {
       const response = await fetch(
         `/activities/${encodeURIComponent(
-          activity
+          currentActivity
         )}/signup?email=${encodeURIComponent(email)}`,
         {
           method: "POST",
@@ -853,7 +898,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (response.ok) {
         messageDiv.textContent = result.message;
         messageDiv.className = "success";
-        signupForm.reset();
+        closeModal();
 
         // Refresh activities list and highlights to show updated participants
         fetchParticipationHighlights();
@@ -870,10 +915,10 @@ document.addEventListener("DOMContentLoaded", () => {
         messageDiv.classList.add("hidden");
       }, 5000);
     } catch (error) {
-      messageDiv.textContent = "Failed to sign up. Please try again.";
+      messageDiv.textContent = "Failed to register. Please try again.";
       messageDiv.className = "error";
       messageDiv.classList.remove("hidden");
-      console.error("Error signing up:", error);
+      console.error("Error registering:", error);
     }
   });
 
