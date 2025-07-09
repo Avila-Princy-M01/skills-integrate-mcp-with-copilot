@@ -55,16 +55,25 @@ header {
 
 .header-content {
   display: flex;
+ copilot/fix-2
   align-items: center;
   justify-content: space-between;
   max-width: 800px;
   margin: 0 auto;
+
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+ main
 }
 
 .header-text {
   flex: 1;
 }
 
+ copilot/fix-2
 .mascot-left, .mascot-right {
   width: 80px;
   height: 80px;
@@ -86,6 +95,163 @@ header {
   object-fit: cover;
   border-radius: 50%;
   border: 2px solid #32cd32;
+
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-icon {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background-color 0.2s;
+}
+
+.user-icon:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+#user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#user-name {
+  font-size: 14px;
+  color: #e3f2fd;
+}
+
+.logout-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.2s;
+}
+
+.logout-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Modal styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: #1a237e;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-btn:hover {
+  color: #1a237e;
+}
+
+.modal-content form {
+  padding: 20px;
+}
+
+.modal-content .form-group {
+  margin-bottom: 15px;
+}
+
+.modal-content button[type="submit"] {
+  width: 100%;
+  background-color: #1a237e;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.modal-content button[type="submit"]:hover {
+  background-color: #3949ab;
+}
+
+#login-message {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.info-note {
+  background-color: #e3f2fd;
+  border: 1px solid #90caf9;
+  border-radius: 4px;
+  padding: 15px;
+  margin-bottom: 20px;
+  color: #1565c0;
+}
+
+.info-note p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .user-section {
+    order: -1;
+    align-self: flex-end;
+  }
+ main
 }
 
 header h1 {
@@ -119,6 +285,94 @@ section h3 {
   padding-bottom: 10px;
   border-bottom: 1px solid #ddd;
   color: #228b22;
+}
+
+/* Participation Highlights Section */
+#participation-highlights {
+  background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+  color: white;
+  margin-bottom: 30px;
+}
+
+#participation-highlights h3 {
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.highlights-stats {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  padding: 15px 0;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 2em;
+  font-weight: bold;
+  color: #ffd54f;
+}
+
+.stat-label {
+  font-size: 0.9em;
+  opacity: 0.9;
+}
+
+.top-participants h4 {
+  margin-bottom: 15px;
+  color: #ffd54f;
+}
+
+.participants-highlight-list {
+  list-style: none;
+  padding: 0;
+}
+
+.participant-highlight {
+  background: rgba(255, 255, 255, 0.1);
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #ffd54f;
+}
+
+.participant-name {
+  font-weight: bold;
+  font-size: 1.1em;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.activity-count {
+  color: #ffd54f;
+  font-size: 0.9em;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.activity-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.activity-badge {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.no-participants {
+  color: rgba(255, 255, 255, 0.8);
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
 }
 
 .activity-card {
