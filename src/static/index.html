@@ -8,15 +8,61 @@
   </head>
   <body>
     <header>
+ copilot/fix-11
       <h1>Mergington High School</h1>
       <h2>Extracurricular Activities & Team Management</h2>
       <nav>
         <button id="activities-tab" class="tab-button active">Activities</button>
         <button id="teams-tab" class="tab-button">Teams</button>
       </nav>
+
+      <div class="header-content">
+ copilot/fix-2
+        <img src="https://octodex.github.com/images/welcometocat.png" alt="Welcome Octocat" class="mascot-left">
+
+ main
+        <div class="header-text">
+          <h1>Mergington High School</h1>
+          <h2>Extracurricular Activities</h2>
+        </div>
+ copilot/fix-2
+        <img src="https://octodex.github.com/images/privateinvestocat.jpg" alt="Private Investocat" class="mascot-right">
+        <div class="user-section">
+          <div id="user-info" class="hidden">
+            <span id="user-name">Welcome, Teacher</span>
+            <button id="logout-btn" class="logout-btn">Logout</button>
+          </div>
+          <button id="user-icon" class="user-icon">👤</button>
+        </div>
+ main
+      </div>
+main
     </header>
 
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Teacher Login</h3>
+          <button class="close-btn" id="close-modal">×</button>
+        </div>
+        <form id="login-form">
+          <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" required />
+          </div>
+          <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" required />
+          </div>
+          <button type="submit">Login</button>
+        </form>
+        <div id="login-message" class="hidden"></div>
+      </div>
+    </div>
+
     <main>
+ copilot/fix-11
       <!-- Activities Tab Content -->
       <div id="activities-content" class="tab-content active">
         <section id="activities-container">
@@ -24,6 +70,93 @@
           <div id="activities-list">
             <!-- Activities will be loaded here -->
             <p>Loading activities...</p>
+
+ copilot/fix-8
+      <section id="profiles-container">
+        <h3>Student Profiles</h3>
+        <div id="profiles-list">
+          <!-- Profiles will be loaded here -->
+          <p>Loading profiles...</p>
+        </div>
+      </section>
+
+      <section id="profile-form-container">
+        <h3>Create/Edit Your Profile</h3>
+        <form id="profile-form">
+          <div class="form-group">
+            <label for="profile-email">Email:</label>
+            <input type="email" id="profile-email" required placeholder="your-email@mergington.edu" />
+          </div>
+          <div class="form-group">
+            <label for="profile-name">Full Name:</label>
+            <input type="text" id="profile-name" required placeholder="Your Full Name" />
+          </div>
+          <div class="form-group">
+            <label for="profile-grade">Grade Level:</label>
+            <select id="profile-grade" required>
+              <option value="">-- Select Grade --</option>
+              <option value="9">9th Grade</option>
+              <option value="10">10th Grade</option>
+              <option value="11">11th Grade</option>
+              <option value="12">12th Grade</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="profile-achievements">Achievements (comma-separated):</label>
+            <textarea id="profile-achievements" placeholder="Honor Roll, Science Fair Winner, etc."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="profile-roles">Roles (comma-separated):</label>
+            <textarea id="profile-roles" placeholder="Student Council Member, Class Representative, etc."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="profile-skills">Skills (comma-separated):</label>
+            <textarea id="profile-skills" placeholder="Programming, Leadership, Public Speaking, etc."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="profile-activities">Extracurricular Activities (comma-separated):</label>
+            <textarea id="profile-activities" placeholder="Chess Club, Programming Class, etc."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="profile-leadership">Leadership Roles (comma-separated):</label>
+            <textarea id="profile-leadership" placeholder="Team Captain, Club President, etc."></textarea>
+          </div>
+          <button type="submit">Create/Update Profile</button>
+        </form>
+        <div id="profile-message" class="hidden"></div>
+      </section>
+
+
+      <section id="participation-highlights">
+        <h3>🌟 Participation Highlights</h3>
+        <div id="highlights-content">
+          <!-- Participation highlights will be loaded here -->
+          <p>Loading participation highlights...</p>
+        </div>
+      </section>
+ main
+      <section id="activities-container">
+        <h3>Available Activities</h3>
+        <div class="activities-header">
+          <img src="https://octodex.github.com/images/codercat.jpg" alt="Coder Cat" class="activity-mascot">
+          <img src="https://octodex.github.com/images/stormtroopocat.jpg" alt="Stormtrooper Cat" class="activity-mascot">
+        </div>
+        <div id="activities-list">
+          <!-- Activities will be loaded here -->
+          <p>Loading activities...</p>
+        </div>
+      </section>
+
+      <section id="signup-container">
+        <h3>Sign Up for an Activity</h3>
+        <div id="teacher-only-note" class="info-note">
+          <p><strong>Note:</strong> Only teachers can register and unregister students. Please log in to manage student registrations.</p>
+        </div>
+        <form id="signup-form">
+          <div class="form-group">
+            <label for="email">Student Email:</label>
+            <input type="email" id="email" required placeholder="your-email@mergington.edu" />
+ main
           </div>
         </section>
 
@@ -119,7 +252,11 @@
     </main>
 
     <footer>
-      <p>&copy; 2023 Mergington High School</p>
+      <div class="footer-content">
+        <img src="https://octodex.github.com/images/heisencat.png" alt="Heisencat" class="footer-mascot">
+        <p>&copy; 2023 Mergington High School</p>
+        <img src="https://octodex.github.com/images/octdrey-catburn.jpg" alt="Octdrey Catburn" class="footer-mascot">
+      </div>
     </footer>
 
     <script src="app.js"></script>
