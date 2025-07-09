@@ -8,8 +8,13 @@ for extracurricular activities at Mergington High School.
 from fastapi import FastAPI, HTTPException, Depends, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
+ copilot/fix-8
+from pydantic import BaseModel
+from typing import List, Optional
+
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
+ main
 import os
 from pathlib import Path
 import json
@@ -56,10 +61,94 @@ current_dir = Path(__file__).parent
 app.mount("/static", StaticFiles(directory=os.path.join(Path(__file__).parent,
           "static")), name="static")
 
+ copilot/fix-8
+# Pydantic models for user profiles
+class Profile(BaseModel):
+    email: str
+    name: str
+    grade_level: str
+    achievements: List[str] = []
+    roles: List[str] = []
+    skills: List[str] = []
+    extracurricular_activities: List[str] = []
+    leadership_roles: List[str] = []
+
+class ProfileCreate(BaseModel):
+    email: str
+    name: str
+    grade_level: str
+    achievements: List[str] = []
+    roles: List[str] = []
+    skills: List[str] = []
+    extracurricular_activities: List[str] = []
+    leadership_roles: List[str] = []
+
+# In-memory profiles database
+profiles = {}
+
+# In-memory activity database
+activities = {
+    "Chess Club": {
+        "description": "Learn strategies and compete in chess tournaments",
+        "schedule": "Fridays, 3:30 PM - 5:00 PM",
+        "max_participants": 12,
+        "participants": ["michael@mergington.edu", "daniel@mergington.edu"]
+    },
+    "Programming Class": {
+        "description": "Learn programming fundamentals and build software projects",
+        "schedule": "Tuesdays and Thursdays, 3:30 PM - 4:30 PM",
+        "max_participants": 20,
+        "participants": ["emma@mergington.edu", "sophia@mergington.edu"]
+    },
+    "Gym Class": {
+        "description": "Physical education and sports activities",
+        "schedule": "Mondays, Wednesdays, Fridays, 2:00 PM - 3:00 PM",
+        "max_participants": 30,
+        "participants": ["john@mergington.edu", "olivia@mergington.edu"]
+    },
+    "Soccer Team": {
+        "description": "Join the school soccer team and compete in matches",
+        "schedule": "Tuesdays and Thursdays, 4:00 PM - 5:30 PM",
+        "max_participants": 22,
+        "participants": ["liam@mergington.edu", "noah@mergington.edu"]
+    },
+    "Basketball Team": {
+        "description": "Practice and play basketball with the school team",
+        "schedule": "Wednesdays and Fridays, 3:30 PM - 5:00 PM",
+        "max_participants": 15,
+        "participants": ["ava@mergington.edu", "mia@mergington.edu"]
+    },
+    "Art Club": {
+        "description": "Explore your creativity through painting and drawing",
+        "schedule": "Thursdays, 3:30 PM - 5:00 PM",
+        "max_participants": 15,
+        "participants": ["amelia@mergington.edu", "harper@mergington.edu"]
+    },
+    "Drama Club": {
+        "description": "Act, direct, and produce plays and performances",
+        "schedule": "Mondays and Wednesdays, 4:00 PM - 5:30 PM",
+        "max_participants": 20,
+        "participants": ["ella@mergington.edu", "scarlett@mergington.edu"]
+    },
+    "Math Club": {
+        "description": "Solve challenging problems and participate in math competitions",
+        "schedule": "Tuesdays, 3:30 PM - 4:30 PM",
+        "max_participants": 10,
+        "participants": ["james@mergington.edu", "benjamin@mergington.edu"]
+    },
+    "Debate Team": {
+        "description": "Develop public speaking and argumentation skills",
+        "schedule": "Fridays, 4:00 PM - 5:30 PM",
+        "max_participants": 12,
+        "participants": ["charlotte@mergington.edu", "henry@mergington.edu"]
+    }
+}
+
 # Load activities from JSON file
 activities_file = os.path.join(current_dir, "activities.json")
 with open(activities_file, "r") as f:
     activities = json.load(f)
+ main
 
 
 @app.get("/")
@@ -222,8 +311,68 @@ def get_participation_highlights():
         "total_activities": total_activities
     }
 
+
+# Profile endpoints
+@app.get("/profiles")
+def get_profiles():
+    """Get all profiles"""
+    return profiles
+
+
+@app.get("/profiles/{email}")
+def get_profile(email: str):
+    """Get a specific profile by email"""
+    if email not in profiles:
+        raise HTTPException(status_code=404, detail="Profile not found")
+    return profiles[email]
+
+
+@app.post("/profiles")
+def create_profile(profile: ProfileCreate):
+    """Create a new profile"""
+    if profile.email in profiles:
+        raise HTTPException(status_code=400, detail="Profile already exists")
+    
+    profiles[profile.email] = profile.dict()
+    return {"message": f"Profile created for {profile.email}"}
+
+
+@app.put("/profiles/{email}")
+def update_profile(email: str, profile: ProfileCreate):
+    """Update an existing profile"""
+    if email not in profiles:
+        raise HTTPException(status_code=404, detail="Profile not found")
+    
+    profiles[email] = profile.dict()
+    return {"message": f"Profile updated for {email}"}
+
+
+@app.delete("/profiles/{email}")
+def delete_profile(email: str):
+    """Delete a profile"""
+    if email not in profiles:
+        raise HTTPException(status_code=404, detail="Profile not found")
+    
+    del profiles[email]
+    return {"message": f"Profile deleted for {email}"}
+
+
 # Load activities from JSON file
 activities_file = os.path.join(current_dir, "activities.json")
 with open(activities_file, "r") as f:
     activities = json.load(f)
+ copilot/fix-8
+
+# Load profiles from JSON file (create if doesn't exist)
+profiles_file = os.path.join(current_dir, "profiles.json")
+try:
+    with open(profiles_file, "r") as f:
+        profiles = json.load(f)
+except FileNotFoundError:
+    profiles = {}
+    # Create empty profiles.json file
+    with open(profiles_file, "w") as f:
+        json.dump(profiles, f, indent=2)
+
+ main
  main

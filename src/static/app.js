@@ -3,6 +3,119 @@ document.addEventListener("DOMContentLoaded", () => {
   const activitySelect = document.getElementById("activity");
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
+ copilot/fix-8
+  
+  // Profile elements
+  const profilesList = document.getElementById("profiles-list");
+  const profileForm = document.getElementById("profile-form");
+  const profileMessageDiv = document.getElementById("profile-message");
+
+  // Function to fetch profiles from API
+  async function fetchProfiles() {
+    try {
+      const response = await fetch("/profiles");
+      const profiles = await response.json();
+
+      // Clear loading message
+      profilesList.innerHTML = "";
+
+      // Check if profiles exist
+      if (Object.keys(profiles).length === 0) {
+        profilesList.innerHTML = "<p>No profiles created yet. Create the first profile below!</p>";
+        return;
+      }
+
+      // Populate profiles list
+      Object.entries(profiles).forEach(([email, profile]) => {
+        const profileCard = document.createElement("div");
+        profileCard.className = "profile-card";
+
+        const createTagsHTML = (items) => {
+          return items.map(item => `<span class="profile-tag">${item}</span>`).join("");
+        };
+
+        profileCard.innerHTML = `
+          <h4>${profile.name}</h4>
+          <p><strong>Email:</strong> ${profile.email}</p>
+          <p><strong>Grade:</strong> ${profile.grade_level}</p>
+          
+          ${profile.achievements.length > 0 ? `
+            <div class="profile-section">
+              <strong>Achievements:</strong>
+              <div class="profile-tags">${createTagsHTML(profile.achievements)}</div>
+            </div>
+          ` : ''}
+          
+          ${profile.roles.length > 0 ? `
+            <div class="profile-section">
+              <strong>Roles:</strong>
+              <div class="profile-tags">${createTagsHTML(profile.roles)}</div>
+            </div>
+          ` : ''}
+          
+          ${profile.skills.length > 0 ? `
+            <div class="profile-section">
+              <strong>Skills:</strong>
+              <div class="profile-tags">${createTagsHTML(profile.skills)}</div>
+            </div>
+          ` : ''}
+          
+          ${profile.extracurricular_activities.length > 0 ? `
+            <div class="profile-section">
+              <strong>Extracurricular Activities:</strong>
+              <div class="profile-tags">${createTagsHTML(profile.extracurricular_activities)}</div>
+            </div>
+          ` : ''}
+          
+          ${profile.leadership_roles.length > 0 ? `
+            <div class="profile-section">
+              <strong>Leadership Roles:</strong>
+              <div class="profile-tags">${createTagsHTML(profile.leadership_roles)}</div>
+            </div>
+          ` : ''}
+        `;
+
+        profilesList.appendChild(profileCard);
+      });
+    } catch (error) {
+      profilesList.innerHTML = "<p>Error loading profiles. Please try again.</p>";
+      console.error("Error fetching profiles:", error);
+    }
+  }
+
+  // Handle profile form submission
+  profileForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const email = document.getElementById("profile-email").value;
+    const name = document.getElementById("profile-name").value;
+    const grade = document.getElementById("profile-grade").value;
+    const achievements = document.getElementById("profile-achievements").value
+      .split(",").map(s => s.trim()).filter(s => s);
+    const roles = document.getElementById("profile-roles").value
+      .split(",").map(s => s.trim()).filter(s => s);
+    const skills = document.getElementById("profile-skills").value
+      .split(",").map(s => s.trim()).filter(s => s);
+    const activities = document.getElementById("profile-activities").value
+      .split(",").map(s => s.trim()).filter(s => s);
+    const leadership = document.getElementById("profile-leadership").value
+      .split(",").map(s => s.trim()).filter(s => s);
+
+    const profileData = {
+      email,
+      name,
+      grade_level: grade,
+      achievements,
+      roles,
+      skills,
+      extracurricular_activities: activities,
+      leadership_roles: leadership
+    };
+
+    try {
+      // First try to create the profile
+      let response = await fetch("/profiles", {
+
  copilot/fix-9
   const highlightsContent = document.getElementById("highlights-content");
 
@@ -154,10 +267,54 @@ document.addEventListener("DOMContentLoaded", () => {
     
     try {
       const response = await fetch("/auth/login", {
+ main
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+ copilot/fix-8
+        body: JSON.stringify(profileData),
+      });
+
+      // If profile already exists, update it
+      if (response.status === 400) {
+        response = await fetch(`/profiles/${encodeURIComponent(email)}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(profileData),
+        });
+      }
+
+      const result = await response.json();
+
+      if (response.ok) {
+        profileMessageDiv.textContent = result.message;
+        profileMessageDiv.className = "success";
+        profileForm.reset();
+
+        // Refresh profiles list
+        fetchProfiles();
+      } else {
+        profileMessageDiv.textContent = result.detail || "An error occurred";
+        profileMessageDiv.className = "error";
+      }
+
+      profileMessageDiv.classList.remove("hidden");
+
+      // Hide message after 5 seconds
+      setTimeout(() => {
+        profileMessageDiv.classList.add("hidden");
+      }, 5000);
+    } catch (error) {
+      profileMessageDiv.textContent = "Failed to save profile. Please try again.";
+      profileMessageDiv.className = "error";
+      profileMessageDiv.classList.remove("hidden");
+      console.error("Error saving profile:", error);
+    }
+  });
+
         body: JSON.stringify({
           username: username,
           password: password
@@ -222,6 +379,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 3000);
  main
   }
+ main
 
   // Function to fetch activities from API
   async function fetchActivities() {
@@ -423,6 +581,10 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Initialize app
+ copilot/fix-8
+  fetchProfiles();
+
   fetchParticipationHighlights();
+ main
   fetchActivities();
 });
